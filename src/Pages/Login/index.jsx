@@ -19,8 +19,9 @@ function Login({ authenticated, setAuthenticated }) {
     api
       .post("/sessions", data)
       .then((response) => {
-        const { token } = response.data;
+        const { token, user } = response.data;
         localStorage.setItem("@Doit:token", JSON.stringify(token));
+        localStorage.setItem("@Doit:user", JSON.stringify(user));
         toast.success("Sucesso ao fazer login!");
         setAuthenticated(true);
         return <Redirect to="/Dashboard" />;
@@ -68,7 +69,7 @@ function Login({ authenticated, setAuthenticated }) {
             />
             <Button type="submit">Entrar</Button>
             <p>
-              Não tem uma conta? <Link to="/Singup">cadastre-se</Link>
+              Não tem conta? <Link to="/Singup"> faça seu cadastro</Link>
             </p>
           </form>
         </AnimationContainer>

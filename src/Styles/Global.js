@@ -18,7 +18,7 @@ export default createGlobalStyle`
         background-color: var(---vanilla);
         color: var(---black);
     }
-    body,input,button{
+    body,input,button,select{
         font-family: "PT serif",serif;
         font-size: 1rem;
     }
