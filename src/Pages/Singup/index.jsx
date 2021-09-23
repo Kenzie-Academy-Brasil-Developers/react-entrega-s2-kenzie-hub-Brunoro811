@@ -11,9 +11,22 @@ import { FiUser, FiMail, FiLock } from "react-icons/fi";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import api from "../../Services/Api";
 function Singup() {
-  const onSubmitFunction = (data) => {
-    console.log(data);
+  const onSubmitFunction = ({ name, email, password }) => {
+    const user = {
+      name,
+      email,
+      password,
+      bio: "bio ",
+      contact: "00",
+      course_module: "front",
+    };
+    console.log(user);
+    api
+      .post("/users", user)
+      .then((response) => console.log(response.data))
+      .catch((error) => console.log(error));
   };
 
   const registerShema = yup.object().shape({
