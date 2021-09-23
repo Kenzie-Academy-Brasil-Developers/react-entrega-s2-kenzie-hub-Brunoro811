@@ -7,7 +7,7 @@ function Input({ label, icon: Icon, register, name, error, ...rest }) {
         {!!error && <span> - {error}</span>}
       </div>
 
-      <InputContainer>
+      <InputContainer isErrored={!!error}>
         {Icon && <Icon size={20} />}
         <input {...register(name)} {...rest} />
       </InputContainer>

@@ -24,13 +24,13 @@ function Singup() {
         /^([A-Za-z])+([A-Za-z])\s([A-Za-z])+/g,
         "Completo e somente letras"
       ),
-    email: yup.string().required("Obrigatório").email("Email inválido"),
+    email: yup.string().required("Obrigatório").email("Inválido"),
     password: yup
       .string()
       .required("Obrigatório")
       .matches(
         /^(?=.{8,})+(([A-Za-z])+([0-9])+([!@.]))/g,
-        "*8 Caracteres letras,números e !@."
+        "*8 Caracteres com letras,números e !@."
       ),
     confirmPassword: yup
       .string()
