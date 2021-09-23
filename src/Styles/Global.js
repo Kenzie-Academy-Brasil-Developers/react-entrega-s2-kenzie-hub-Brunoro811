@@ -10,7 +10,8 @@ export default createGlobalStyle`
         --white: #f5f5f5;
         --vanilla: #E5E5E5;
         --black:#0c0d0d;
-        --orang: #c85311;
+        --orange: #c85311;
+        --gray: #666360;
     }
     body{
         background-color: var(---vanilla);
