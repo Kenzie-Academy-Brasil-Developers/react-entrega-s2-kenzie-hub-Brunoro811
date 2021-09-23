@@ -11,11 +11,24 @@ import { FiMail, FiLock } from "react-icons/fi";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-function Login() {
+import api from "../../Services/Api";
+import { toast } from "react-toastify";
+import { Redirect } from "react-router-dom";
+function Login({ authenticated, setAuthenticated }) {
   const onSubmitFunction = (data) => {
-    console.log(data);
+    api
+      .post("/sessions", data)
+      .then((response) => {
+        const { token } = response.data;
+        localStorage.setItem("@Doit:token", JSON.stringify(token));
+        toast.success("Sucesso ao fazer login!");
+        setAuthenticated(true);
+        return <Redirect to="/Dashboard" />;
+      })
+      .catch((error) => {
+        toast.error("Erro, Senha e Email incorretos ou não cadastrados!");
+      });
   };
-
   const registerShema = yup.object().shape({
     email: yup.string().required("Obrigatório").email("Email inválido"),
     password: yup.string().required("Obrigatório"),
@@ -27,6 +40,9 @@ function Login() {
   } = useForm({
     resolver: yupResolver(registerShema),
   });
+  if (authenticated) {
+    return <Redirect to="/Dashboard" />;
+  }
   return (
     <Container>
       <Content>
@@ -47,7 +63,7 @@ function Login() {
               name={"password"}
               icon={FiLock}
               label={"Senha"}
-              placeholder="Uma senhbem segura"
+              placeholder="Sua senha"
               type="password"
             />
             <Button type="submit">Entrar</Button>

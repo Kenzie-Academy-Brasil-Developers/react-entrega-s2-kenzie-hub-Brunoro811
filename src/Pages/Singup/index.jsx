@@ -13,8 +13,8 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import api from "../../Services/Api";
 import { toast } from "react-toastify";
-import { useHistory } from "react-router-dom";
-function Singup() {
+import { useHistory, Redirect } from "react-router-dom";
+function Singup({ authenticated }) {
   const history = useHistory();
   const onSubmitFunction = ({ name, email, password }) => {
     const user = {
@@ -64,6 +64,9 @@ function Singup() {
   } = useForm({
     resolver: yupResolver(registerShema),
   });
+  if (authenticated) {
+    return <Redirect to="/Dashboard" />;
+  }
   return (
     <Container>
       <BackgroundImage />
