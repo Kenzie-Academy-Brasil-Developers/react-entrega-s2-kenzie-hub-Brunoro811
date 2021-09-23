@@ -12,7 +12,10 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import api from "../../Services/Api";
+import { toast } from "react-toastify";
+import { useHistory } from "react-router-dom";
 function Singup() {
+  const history = useHistory();
   const onSubmitFunction = ({ name, email, password }) => {
     const user = {
       name,
@@ -22,11 +25,15 @@ function Singup() {
       contact: "00",
       course_module: "front",
     };
-    console.log(user);
     api
       .post("/users", user)
-      .then((response) => console.log(response.data))
-      .catch((error) => console.log(error));
+      .then((_) => {
+        toast.success("Sucesso ao criar a conta!");
+        return history.push("/Login");
+      })
+      .catch((error) =>
+        toast.error("Erro ao criar a conta, tente outro email!")
+      );
   };
 
   const registerShema = yup.object().shape({
