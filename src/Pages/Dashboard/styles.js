@@ -7,9 +7,13 @@ export const Container = styled.div`
   padding: 0px 38px;
 `;
 export const InputContainer = styled.form`
+  width: 100%;
   flex: 1;
   margin-top: 32px;
   padding: 0 38px;
+  span {
+    font-style: italic;
+  }
   section {
     display: flex;
     flex-direction: row;
@@ -53,5 +57,29 @@ export const Header = styled.div`
   }
   @media (min-width: 900px) {
     right: 80px;
+  }
+`;
+export const Modal = styled.div`
+  position: absolute;
+  top: 35px;
+  right: 0;
+  left: 0;
+  width: 90%;
+  height: 300px;
+  margin: 0 auto;
+  border-radius: 10px;
+  border: 2px solid var(--black);
+  background: var(--white);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .close {
+    color: var(--red);
+    background: transparent;
+    border: none;
+    padding: 10px;
+    svg {
+      font-size: 30px;
+    }
   }
 `;

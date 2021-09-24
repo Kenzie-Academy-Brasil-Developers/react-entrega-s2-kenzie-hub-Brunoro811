@@ -1,5 +1,12 @@
 import { Container, InputContainer } from "./style";
-function Input({ label, icon: Icon, register, name, error, ...rest }) {
+function Input({
+  label,
+  icon: Icon,
+  register = () => "",
+  name,
+  error,
+  ...rest
+}) {
   return (
     <Container>
       <div>

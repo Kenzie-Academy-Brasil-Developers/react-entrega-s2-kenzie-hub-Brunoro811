@@ -30,4 +30,9 @@ export const Container = styled.div`
     margin-right: 4px;
     transform: translateY(2px);
   }
+  div {
+    margin: 0;
+    padding: 0;
+    text-align: end;
+  }
 `;

@@ -1,8 +1,14 @@
-import { Container, Header, InputContainer, TaskContainer } from "./styles";
+import {
+  Container,
+  Header,
+  InputContainer,
+  TaskContainer,
+  Modal,
+} from "./styles";
 import { Redirect, useHistory } from "react-router-dom";
 import Input from "../../Components/Input";
 import { useForm } from "react-hook-form";
-import { FiEdit2 } from "react-icons/fi";
+import { FiEdit2, FiXCircle } from "react-icons/fi";
 import Button from "../../Components/Button";
 import Card from "../../Components/Card";
 import { useCallback, useEffect, useState } from "react";
@@ -45,6 +51,51 @@ function Dashboard({ authenticated, setAuthenticated }) {
         toast.error("Erro ao adicionar, tente outra linguagem!");
       });
   };
+  const handleDelete = (id) => {
+    api
+      .delete(`/users/techs/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        loadLanguage();
+        return toast.success("Deletado com sucesso!");
+      })
+      .catch((error) => {
+        toast.error("Erro ao deletar linguagens!");
+      });
+  };
+  const [isModal, setIsModal] = useState(false);
+  const [id, setId] = useState("");
+  const [title, setTitle] = useState("");
+  const [status, setStatus] = useState("");
+  const handleEdit = (id, title, status) => {
+    setTitle(title);
+    setStatus(status);
+    setId(id);
+    setIsModal(!isModal);
+  };
+  const OnSubmitEditFunction = () => {
+    api
+      .put(
+        `/users/techs/${id}`,
+        { status: status },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((response) => {
+        setIsModal(!isModal);
+        loadLanguage();
+        return toast.success("Editado com sucesso!");
+      })
+      .catch((error) => {
+        return toast.error("Erro ao editar!");
+      });
+  };
   const history = useHistory();
   const handleLogout = () => {
     localStorage.clear();
@@ -57,36 +108,68 @@ function Dashboard({ authenticated, setAuthenticated }) {
     }
   }, [loadLanguage, authenticated]);
   useEffect(() => () => {}, []);
-
   if (!authenticated) {
     return <Redirect to="/Login" />;
   }
   return (
-    <Container>
-      <Header>
-        <Button onClick={handleLogout}>Sair</Button>
-      </Header>
-      <InputContainer onSubmit={handleSubmit(onSubmitFunction)}>
-        <time>23 de setembro de 2021</time>
-        <section>
-          <Input
-            icon={FiEdit2}
-            placeholder="Nova linguagem"
-            register={register}
-            name={"title"}
-          />
-          <Select register={register} />
-          <Button type="submit">Adicionar</Button>
-        </section>
-      </InputContainer>
-      <TaskContainer>
-        {techs[0] &&
-          techs.map((element) => (
-            <Card key={element.title} element={element} />
-          ))}
-        {!techs[0] && <p>Sem linguagens cadastradas!</p>}
-      </TaskContainer>
-    </Container>
+    <>
+      <Container>
+        <Header>
+          <Button onClick={handleLogout}>Sair</Button>
+        </Header>
+        <InputContainer onSubmit={handleSubmit(onSubmitFunction)}>
+          <time>23 de setembro de 2021</time>
+          <section>
+            <Input
+              icon={FiEdit2}
+              placeholder="Nova linguagem"
+              register={register}
+              name={"title"}
+            />
+            <Select register={register} />
+            <Button type="submit">Adicionar</Button>
+          </section>
+        </InputContainer>
+        <TaskContainer>
+          {techs[0] &&
+            techs.map((element) => (
+              <Card
+                key={element.title}
+                handleDelete={handleDelete}
+                handleEdit={handleEdit}
+                element={element}
+              />
+            ))}
+          {!techs[0] && <p>Sem linguagens cadastradas!</p>}
+        </TaskContainer>
+      </Container>
+      {isModal && (
+        <Modal>
+          <button onClick={handleEdit} className="close">
+            <FiXCircle />
+          </button>
+          <InputContainer onSubmit={handleSubmit(OnSubmitEditFunction)}>
+            <time>23 de setembro de 2021</time>
+            <section>
+              <Input
+                icon={FiEdit2}
+                placeholder="Nova linguagem"
+                value={title}
+                name={"title"}
+                onChange={(e) => setTitle(e.target.value)}
+                disabled
+              />
+              <Select
+                status={status}
+                onChange={(e) => setStatus(e.target.value)}
+              />
+              <Button type="submit">Enviar</Button>
+            </section>
+            {title && <span>**Titulo não editável</span>}
+          </InputContainer>
+        </Modal>
+      )}
+    </>
   );
 }
 export default Dashboard;

@@ -1,8 +1,18 @@
 import { Container } from "./styles";
-import { FiClipboard, FiCalendar, FiBarChart } from "react-icons/fi";
-import Button from "../Button";
+import {
+  FiClipboard,
+  FiCalendar,
+  FiBarChart,
+  FiTrash2,
+  FiEdit,
+} from "react-icons/fi";
 import { useEffect, useState } from "react";
-function Card({ element: { title, created_at, status, onClick } }) {
+import ButtonCard from "../ButtonCard";
+function Card({
+  handleDelete,
+  handleEdit,
+  element: { id, title, created_at, status },
+}) {
   const [date, setDate] = useState("");
   const [year] = useState(created_at.substring(0, 4));
   const [month] = useState(created_at.substring(6, 7));
@@ -12,6 +22,22 @@ function Card({ element: { title, created_at, status, onClick } }) {
   }, [day, month, year]);
   return (
     <Container>
+      <div>
+        <ButtonCard
+          Icon={FiEdit}
+          callback={handleEdit}
+          id={id}
+          title={title}
+          status={status}
+          classe={""}
+        />
+        <ButtonCard
+          Icon={FiTrash2}
+          callback={handleDelete}
+          id={id}
+          classe={"close"}
+        />
+      </div>
       <span>
         <h4>
           <FiClipboard />
@@ -26,7 +52,6 @@ function Card({ element: { title, created_at, status, onClick } }) {
         <FiBarChart />
         {status}
       </p>
-      <Button onClick={onClick}>Editar</Button>
     </Container>
   );
 }
