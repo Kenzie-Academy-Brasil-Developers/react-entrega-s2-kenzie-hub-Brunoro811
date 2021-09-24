@@ -21,6 +21,7 @@ function Dashboard({ authenticated, setAuthenticated }) {
   );
   const [user] = useState(JSON.parse(localStorage.getItem("@Doit:user")) || "");
   const [techs, setTechs] = useState({});
+  const [idTech, setIdTech] = useState("");
   const { register, handleSubmit } = useForm();
   const loadLanguage = useCallback(() => {
     api
@@ -51,22 +52,29 @@ function Dashboard({ authenticated, setAuthenticated }) {
         toast.error("Erro ao adicionar, tente outra linguagem!");
       });
   };
-  const handleDelete = (id) => {
-    api
-      .delete(`/users/techs/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        loadLanguage();
-        return toast.success("Deletado com sucesso!");
-      })
-      .catch((error) => {
-        toast.error("Erro ao deletar linguagens!");
-      });
+  const handleDelete = (id, status) => {
+    setIsModalDelete(!isModalDelete);
+    if (!status) {
+      setIdTech(id);
+    }
+    if (status) {
+      api
+        .delete(`/users/techs/${idTech}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          loadLanguage();
+          return toast.success("Deletado com sucesso!");
+        })
+        .catch((error) => {
+          toast.error("Erro ao deletar linguagens!");
+        });
+    }
   };
-  const [isModal, setIsModal] = useState(false);
+  const [isModalEdit, setIsModalEdit] = useState(false);
+  const [isModalDelete, setIsModalDelete] = useState(false);
   const [id, setId] = useState("");
   const [title, setTitle] = useState("");
   const [status, setStatus] = useState("");
@@ -74,7 +82,7 @@ function Dashboard({ authenticated, setAuthenticated }) {
     setTitle(title);
     setStatus(status);
     setId(id);
-    setIsModal(!isModal);
+    setIsModalEdit(!isModalEdit);
   };
   const OnSubmitEditFunction = () => {
     api
@@ -88,7 +96,7 @@ function Dashboard({ authenticated, setAuthenticated }) {
         }
       )
       .then((response) => {
-        setIsModal(!isModal);
+        setIsModalEdit(!isModalEdit);
         loadLanguage();
         return toast.success("Editado com sucesso!");
       })
@@ -115,6 +123,9 @@ function Dashboard({ authenticated, setAuthenticated }) {
     <>
       <Container>
         <Header>
+          <h1>
+            do<span>.</span>it
+          </h1>
           <Button onClick={handleLogout}>Sair</Button>
         </Header>
         <InputContainer onSubmit={handleSubmit(onSubmitFunction)}>
@@ -143,30 +154,50 @@ function Dashboard({ authenticated, setAuthenticated }) {
           {!techs[0] && <p>Sem linguagens cadastradas!</p>}
         </TaskContainer>
       </Container>
-      {isModal && (
+      {isModalEdit && (
         <Modal>
-          <button onClick={handleEdit} className="close">
-            <FiXCircle />
-          </button>
-          <InputContainer onSubmit={handleSubmit(OnSubmitEditFunction)}>
-            <time>23 de setembro de 2021</time>
-            <section>
-              <Input
-                icon={FiEdit2}
-                placeholder="Nova linguagem"
-                value={title}
-                name={"title"}
-                onChange={(e) => setTitle(e.target.value)}
-                disabled
-              />
-              <Select
-                status={status}
-                onChange={(e) => setStatus(e.target.value)}
-              />
-              <Button type="submit">Enviar</Button>
-            </section>
-            {title && <span>**Titulo não editável</span>}
-          </InputContainer>
+          <div className="Body-Black">
+            <div className="Modal">
+              <button onClick={handleEdit} className="close">
+                <FiXCircle />
+              </button>
+              <InputContainer onSubmit={handleSubmit(OnSubmitEditFunction)}>
+                <time>23 de setembro de 2021</time>
+                <section>
+                  <Input
+                    icon={FiEdit2}
+                    placeholder="Nova linguagem"
+                    value={title}
+                    name={"title"}
+                    onChange={(e) => setTitle(e.target.value)}
+                    disabled
+                  />
+                  <Select
+                    status={status}
+                    onChange={(e) => setStatus(e.target.value)}
+                  />
+                  <Button type="submit">Enviar</Button>
+                </section>
+                {title && <span>**Titulo não editável</span>}
+              </InputContainer>
+            </div>
+          </div>
+        </Modal>
+      )}
+      {isModalDelete && (
+        <Modal>
+          <div className="Body-Black">
+            <div className="Modal">
+              <button onClick={handleDelete} className="close">
+                <FiXCircle />
+              </button>
+              <div>
+                <p>Tem certeza que quer deletar?</p>
+                <Button onClick={() => handleDelete(id, true)}>Sim</Button>
+                <Button onClick={handleDelete}>Não</Button>
+              </div>
+            </div>
+          </div>
         </Modal>
       )}
     </>

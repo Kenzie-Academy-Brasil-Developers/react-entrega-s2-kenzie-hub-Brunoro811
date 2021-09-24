@@ -9,8 +9,18 @@ export const Container = styled.div`
 export const InputContainer = styled.form`
   width: 100%;
   flex: 1;
-  margin-top: 32px;
-  padding: 0 38px;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  justify-content: space-around;
+  margin-top: 40px;
+  @media (min-width: 800px) {
+    display: block;
+  }
+  padding: 0 10px;
+  @media (min-width: 800px) {
+    padding: 0px 38px;
+  }
   span {
     font-style: italic;
   }
@@ -36,19 +46,31 @@ export const TaskContainer = styled.div`
   margin-top: 32px;
   display: flex;
   flex-wrap: wrap;
-  div {
+  gap: 15px;
+  justify-content: center;
+  @media (min-width: 800px) {
+    justify-content: flex-start;
+  }
+
+  /* div {
     margin-top: 16px;
     margin-right: 32px;
-  }
+  } */
 `;
 export const Header = styled.div`
-  width: 100px;
+  width: 200px;
   height: 50px;
   display: flex;
   justify-content: flex-end;
   position: absolute;
   top: 0px;
   right: 0px;
+  h1 {
+    padding-right: 20px;
+    span {
+      color: var(--orange);
+    }
+  }
   button {
     margin-top: 0px;
     border-radius: 0px;
@@ -60,26 +82,44 @@ export const Header = styled.div`
   }
 `;
 export const Modal = styled.div`
-  position: absolute;
-  top: 35px;
-  right: 0;
-  left: 0;
-  width: 90%;
-  height: 300px;
-  margin: 0 auto;
-  border-radius: 10px;
-  border: 2px solid var(--black);
-  background: var(--white);
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  .close {
-    color: var(--red);
-    background: transparent;
-    border: none;
-    padding: 10px;
-    svg {
-      font-size: 30px;
+  justify-content: center;
+  .Body-Black {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    min-height: 100vh;
+    background-color: rgba(0, 0, 0, 0.9);
+    .Modal {
+      position: absolute;
+      top: 35px;
+      right: 0;
+      left: 0;
+      width: 90%;
+      height: 350px;
+      margin: 0 auto;
+      border-radius: 10px;
+      border: 2px solid var(--black);
+      background: var(--white);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      div {
+        text-align: center;
+        margin: 0 auto;
+        p {
+          font-family: "Roboto Mono", monospace;
+        }
+      }
+      .close {
+        color: var(--black);
+        background: transparent;
+        border: none;
+        padding: 10px;
+        svg {
+          font-size: 30px;
+        }
+      }
     }
   }
 `;
