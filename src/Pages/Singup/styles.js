@@ -50,7 +50,10 @@ export const AnimationContainer = styled.div`
 
   form {
     margin: 80px 0px;
-    width: 340px;
+    width: 300px;
+    @media (min-width: 600px) {
+      width: 340px;
+    }
     text-align: center;
   }
   h1 {

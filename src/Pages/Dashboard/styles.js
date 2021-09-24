@@ -85,8 +85,11 @@ export const Modal = styled.div`
   display: flex;
   justify-content: center;
   .Body-Black {
-    position: absolute;
+    position: fixed;
     top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
     width: 100%;
     min-height: 100vh;
     background-color: rgba(0, 0, 0, 0.9);
@@ -95,6 +98,7 @@ export const Modal = styled.div`
       top: 35px;
       right: 0;
       left: 0;
+      bottom: 0;
       width: 90%;
       height: 350px;
       margin: 0 auto;
