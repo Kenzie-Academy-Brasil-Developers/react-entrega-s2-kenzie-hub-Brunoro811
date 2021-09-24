@@ -11,9 +11,9 @@ import Select from "../../Components/Select";
 import { toast } from "react-toastify";
 function Dashboard({ authenticated, setAuthenticated }) {
   const [token] = useState(
-    JSON.parse(localStorage.getItem("@Doit:token") || "")
+    JSON.parse(localStorage.getItem("@Doit:token")) || ""
   );
-  const [user] = useState(JSON.parse(localStorage.getItem("@Doit:user") || ""));
+  const [user] = useState(JSON.parse(localStorage.getItem("@Doit:user")) || "");
   const [techs, setTechs] = useState({});
   const { register, handleSubmit } = useForm();
   const loadLanguage = useCallback(() => {
@@ -52,8 +52,10 @@ function Dashboard({ authenticated, setAuthenticated }) {
     return history.push("/");
   };
   useEffect(() => {
-    loadLanguage();
-  }, [loadLanguage]);
+    if (authenticated) {
+      loadLanguage();
+    }
+  }, [loadLanguage, authenticated]);
   useEffect(() => () => {}, []);
 
   if (!authenticated) {
